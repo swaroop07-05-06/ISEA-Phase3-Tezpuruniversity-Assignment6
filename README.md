@@ -1,43 +1,56 @@
-# ISEA-Phase3-Tezpuruniversity-Assignment7
+# 🚀 Application Optimization, Scalability and Reliability (Assignment 8)
 
-A secure multi-client chat application developed using **Python Socket Programming**, **Tkinter GUI**, and **TCP**, built by extending the Assignment 6 GUI chat application. This project implements practical application-level security features such as **user authentication**, **SHA-256 password hashing**, **duplicate login prevention**, **failed login protection**, **session management**, **input validation**, and **secure logging**.
-
----
-
-## 📌 Objective
-
-The objective of this project is to enhance a GUI-based multi-client TCP chat application by implementing practical security mechanisms while maintaining reliable client-server communication. The project demonstrates secure authentication, password protection, session management, and secure network programming concepts.
+A Python-based **GUI Multi-Client Chat Application** developed using **TCP Socket Programming** and **Tkinter**, enhanced with optimization, scalability, and reliability features. This project extends the secure chat application developed in Assignment 7 by improving connection management, resource handling, configuration management, and overall application performance.
 
 ---
 
-## ✨ Features
+# 📌 Project Overview
 
-- 🔐 User Authentication (Username & Password)
-- 🔒 Secure Password Storage using SHA-256
-- 🚫 Duplicate Login Prevention
-- ⚠️ Failed Login Protection (Account Lock after 5 Attempts)
-- ✅ Input Validation
-- ⏱️ Session Timeout Management
-- 📋 Secure Security Logging
-- 💬 Broadcast Messaging
-- 👤 Private Messaging (`/msg`)
-- 👥 Online User List
-- 📝 Persistent Chat History
-- 🖥️ GUI-based Chat Interface using Tkinter
-- 🔄 Background Message Receiving Thread
-- 🌐 Multi-client TCP Communication
-- 📡 Wireshark Verification
+This project demonstrates a reliable and scalable client-server chat application capable of handling multiple concurrent users while maintaining stable communication. The application includes secure authentication, GUI-based messaging, centralized configuration, automatic resource management, and performance evaluation.
 
 ---
 
-# 🛠️ Technologies Used
+# ✨ Features
+
+## 🔐 Security Features (Inherited from Assignment 7)
+
+- User Authentication
+- SHA-256 Password Hashing
+- Duplicate Login Prevention
+- Failed Login Protection
+- Session Management
+- Secure Logging
+- Online User List
+- Broadcast Messaging
+- Private Messaging
+- Chat History
+
+---
+
+## ⚡ Optimization Features (Assignment 8)
+
+- Improved Thread Management
+- Automatic Client Cleanup
+- Better Socket Resource Management
+- Graceful Client Disconnection
+- Automatic Timeout Handling
+- Improved Exception Handling
+- Configuration Management using JSON
+- Support for 10 Concurrent Clients
+- Performance Monitoring
+- Wireshark Verification
+
+---
+
+# 🛠 Technologies Used
 
 - Python 3
 - Socket Programming
 - Tkinter
 - Threading
-- hashlib (SHA-256)
+- JSON
 - CSV
+- hashlib
 - Mininet
 - Wireshark
 - Ubuntu 24.04 LTS
@@ -48,34 +61,41 @@ The objective of this project is to enhance a GUI-based multi-client TCP chat ap
 # 📂 Project Structure
 
 ```text
-ISEA-Phase3-TezpurUniversity-Assignment7/
+Assignment8/
 │
 ├── server.py
 ├── client_gui.py
+├── config.json
 ├── users.csv
-├── chat_history.csv
 ├── security_log.txt
 ├── server_log.txt
+├── chat_history.csv
+├── performance_results.csv
+│
+├── graphs/
+│   ├── clients_vs_delay.png
+│   ├── clients_vs_throughput.png
+│   ├── clients_vs_cpu.png
+│   └── clients_vs_memory.png
+│
 ├── screenshots/
-│   ├── login_window.png
-│   ├── login_success.png
-│   ├── login_failed.png
-│   ├── duplicate_login.png
-│   ├── chat_window.png
+│   ├── server_running.png
+│   ├── client_login.png
+│   ├── multiple_clients.png
 │   ├── broadcast_message.png
 │   ├── private_message.png
-│   ├── logout.png
-│   ├── wireshark_login.png
-│   ├── wireshark_failed_login.png
-│   ├── wireshark_authenticated_chat.png
-│   └── wireshark_logout.png
+│   ├── online_users.png
+│   ├── graceful_shutdown.png
+│   ├── wireshark_capture.png
+│   └── graphs.png
+│
 ├── report.pdf
 └── README.md
 ```
 
 ---
 
-# 🖥️ Software Requirements
+# 💻 Software Requirements
 
 - Ubuntu 24.04 LTS
 - Python 3.x
@@ -89,49 +109,36 @@ ISEA-Phase3-TezpurUniversity-Assignment7/
 # 🌐 Network Topology
 
 ```
-           Chat Server (h1)
-                 |
-        -----------------------
-        |      |      |      |
-      h2      h3     h4      h5
-   ClientA ClientB ClientC ClientD
-```
+                 Chat Server (h1)
+                       |
+------------------------------------------------
+|        |        |        |        |         |
+h2       h3       h4       h5      ...       h11
 
-Start Mininet:
-
-```bash
-sudo mn --topo single,5
-```
-
-Verify:
-
-```bash
-nodes
-net
-pingall
+ClientA  ClientB  ClientC  ClientD         Client10
 ```
 
 ---
 
-# 🚀 Execution Steps
+# 🚀 Setup Instructions
 
 ## 1. Start Mininet
 
 ```bash
-sudo mn --topo single,5
+sudo mn --topo single,11
 ```
 
 ---
 
-## 2. Open Terminals
+## 2. Open XTerm Windows
 
 ```bash
-xterm h1 h2 h3 h4 h5
+xterm h1 h2 h3 h4 h5 h6 h7 h8 h9 h10 h11
 ```
 
 ---
 
-## 3. Start Server
+## 3. Start the Server
 
 ```bash
 python3 server.py
@@ -141,7 +148,7 @@ python3 server.py
 
 ## 4. Start GUI Clients
 
-Run on each client terminal:
+On each client terminal:
 
 ```bash
 python3 client_gui.py
@@ -149,118 +156,135 @@ python3 client_gui.py
 
 ---
 
-## 5. Login
+# ⚙ Configuration
 
-Enter:
+Application settings are stored in **config.json**.
 
-- Username
-- Password
+Example:
 
-Click **Connect**.
+```json
+{
+    "host": "0.0.0.0",
+    "port": 5000,
+    "max_clients": 10,
+    "buffer_size": 1024,
+    "socket_timeout": 30,
+    "reconnect_attempts": 5,
+    "heartbeat_interval": 10,
+    "history_limit": 5
+}
+```
+
+This allows easy modification of server settings without changing the source code.
 
 ---
 
-## 6. Test Features
+# 📊 Performance Evaluation
 
-- Broadcast Message
-- Private Message (`/msg`)
-- Online User List
-- Duplicate Login
-- Failed Login
-- Logout
-- Session Timeout
+The following metrics were evaluated:
 
----
+- Average Message Delay
+- Throughput
+- CPU Usage
+- Memory Usage
 
-# 🔐 Security Features
+Graphs generated:
 
-- SHA-256 Password Hashing
-- User Authentication
-- Duplicate Login Prevention
-- Failed Login Protection
-- Secure Session Management
-- Input Validation
-- Secure Logging
-- Password Protection
-- Logout Handling
+- Clients vs Average Delay
+- Clients vs Throughput
+- Clients vs CPU Usage
+- Clients vs Memory Usage
 
 ---
 
 # 📡 Wireshark Verification
 
-Use the display filter:
+Launch Wireshark:
+
+```bash
+sudo wireshark &
+```
+
+Display filter:
 
 ```text
 tcp.port == 5000
 ```
 
-Capture screenshots for:
+Captured events include:
 
-- Login
-- Failed Login
-- Successful Authentication
-- Broadcast Message
-- Private Message
-- Logout
+- Client Connection
+- Authentication
+- Broadcast Messages
+- Private Messages
+- Graceful Disconnection
 
 ---
 
-# 📷 Sample Screenshots
+# 📈 Performance Results
 
-Add screenshots for:
+| Clients | Delay (ms) | Throughput (msg/sec) | CPU (%) | Memory (MB) |
+|---------:|-----------:|---------------------:|---------:|------------:|
+| 5 | 1.85 | 240 | 14 | 48 |
+| 8 | 2.31 | 378 | 21 | 63 |
+| 10 | 2.94 | 465 | 27 | 74 |
 
-- Login Window
-- Successful Login
-- Main Chat Window
-- Broadcast Messaging
-- Private Messaging
-- Online User List
-- Logout
-- Duplicate Login
-- Failed Login
-- Wireshark Login
-- Wireshark Communication
-- Wireshark Logout
+---
+
+# 🎯 Optimizations Implemented
+
+- Improved scalability for multiple concurrent users
+- Reliable thread management
+- Automatic resource cleanup
+- Socket timeout management
+- Graceful shutdown
+- Centralized configuration
+- Better exception handling
+- Improved maintainability
+- Stable multi-client communication
 
 ---
 
 # 📚 Learning Outcomes
 
+Through this project, the following concepts were explored:
+
 - TCP Socket Programming
-- Client–Server Architecture
-- GUI Programming using Tkinter
-- Authentication & Authorization
-- Password Hashing using SHA-256
-- Secure Session Management
-- Network Security Fundamentals
-- Wireshark Packet Analysis
+- GUI Development with Tkinter
 - Concurrent Programming using Threads
+- Network Optimization
+- Scalable Client–Server Architecture
+- Configuration Management
+- Performance Analysis
+- Wireshark Packet Inspection
+- Reliable Network Application Design
 
 ---
 
-# 📄 Report
+# 🔮 Future Enhancements
 
-The project report includes:
-
-- Objective
-- Security Features Implemented
-- System Architecture
-- Implementation
-- Testing
-- Wireshark Verification
-- Conclusion
+- TLS/SSL Encryption
+- Database Integration
+- Async I/O using asyncio
+- Load Balancing
+- Group Chat Support
+- File Sharing
+- Voice and Video Communication
+- Cloud Deployment
+- Role-Based Access Control
 
 ---
 
 # 📖 References
 
 1. Python Socket Programming Documentation
-2. Python Tkinter Documentation
-3. Python hashlib Documentation
-4. Mininet Documentation
-5. Wireshark User Guide
-6. Andrew S. Tanenbaum – *Computer Networks*
-7. W. Richard Stevens – *TCP/IP Illustrated*
+2. Python Threading Documentation
+3. Python Tkinter Documentation
+4. Python JSON Documentation
+5. Mininet Documentation
+6. Wireshark User Guide
+7. Andrew S. Tanenbaum – *Computer Networks*
+8. W. Richard Stevens – *TCP/IP Illustrated*
 
 ---
 
@@ -275,5 +299,4 @@ Andhra University
 
 ## ⭐ Project Summary
 
-This project demonstrates a secure GUI-based TCP chat application implementing practical authentication, password hashing, session management, input validation, and secure communication. The application supports multiple authenticated users, private messaging, chat history, and secure logging while following the Assignment 7 requirements.
-- Join/Leave notifications
+This project extends the Assignment 7 secure chat application by introducing optimization, scalability, and reliability improvements. It supports multiple concurrent clients, centralized configuration, improved connection management, automatic resource cleanup, and performance evaluation while maintaining secure and reliable TCP-based communication.
